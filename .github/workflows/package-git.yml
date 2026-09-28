@@ -21,9 +21,6 @@ jobs:
     container:
       image: ghcr.io/terrapkg/builder:${{ matrix.version }}
       options: --cap-add=SYS_ADMIN --privileged
-    defaults:
-      run:
-        working-directory: ./packaging
 
     steps:
       - name: Checkout
