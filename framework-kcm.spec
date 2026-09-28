@@ -33,5 +33,5 @@ hardware. It provides battery and hardware controls through framework_tool.
 %{_datadir}/applications/kcm_framework.desktop
 
 %changelog
-* Mon Sep 28 2026 Cypress Reed <cyporess@fyralabs.com>
+* Mon Sep 28 2026 Cypress Reed <cypress@fyralabs.com>
 - Initial package
