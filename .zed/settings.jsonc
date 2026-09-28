@@ -1,0 +1,26 @@
+{
+  "format_on_save": "off",
+  "languages": {
+    "C++": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "clang-format",
+          "arguments": ["--assume-filename", "$ZED_FILE"],
+        },
+      },
+    },
+    "C": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "clang-format",
+          "arguments": ["--assume-filename", "$ZED_FILE"],
+        },
+      },
+    },
+  },
+  "auto_install_extensions": {
+    "Meson": true,
+  },
+}

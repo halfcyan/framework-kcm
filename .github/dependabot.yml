@@ -1,0 +1,14 @@
+version: 2
+
+multi-ecosystem-groups:
+  actions:
+    schedule:
+      interval: weekly
+
+updates:
+  # Maintain GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    patterns:
+      - "*"
+    multi-ecosystem-group: actions

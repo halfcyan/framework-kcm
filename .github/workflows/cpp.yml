@@ -1,0 +1,26 @@
+name: C++ CI
+"on":
+  push:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "meson_options.txt"
+      - "README.md"
+      - ".clang-format"
+      - ".clang-tidy"
+      - ".github/workflows/cpp.yml"
+      - "meson.build"
+  workflow_dispatch:
+
+jobs:
+  ci:
+    permissions:
+      contents: read
+      security-events: write
+    uses: FyraLabs/actions/.github/workflows/cpp.yml@main
+    with:
+      container: ghcr.io/terrapkg/builder:f44
+      packages: meson
+      configure-command: meson setup build
+      build-command: meson compile -C build
+      test-command: meson test -C build --print-errorlogs

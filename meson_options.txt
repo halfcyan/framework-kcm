@@ -1,0 +1,6 @@
+option(
+    'enable_examples',
+    type: 'boolean',
+    value: true,
+    description: 'Build the example executable',
+)
