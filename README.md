@@ -16,11 +16,20 @@ Example screenshot (still early in development):
 - Extra CMake Modules (ECM)
 - `framework-system` providing `framework_tool` for hardware mode
 
+`framework-system` is available from [Terra](https://terrapkg.com) on Fedora.
+
 On Fedora, the development dependencies can be installed with:
 
 ```sh
 sudo dnf install gcc-c++ cmake extra-cmake-modules qt6-qtbase-devel \
     qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel kf6-ki18n-devel
+```
+
+On Ubuntu or Debian, install the equivalent packages with:
+
+```sh
+sudo apt install build-essential cmake extra-cmake-modules qt6-base-dev \
+    qt6-declarative-dev libkf6kcmutils-dev libkf6kirigami-dev libkf6i18n-dev
 ```
 
 ## Compile
