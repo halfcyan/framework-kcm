@@ -1,12 +1,12 @@
 #include "frameworkbackend.hpp"
 
-#include <cassert>
 #include <QCoreApplication>
+#include <cassert>
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     QCoreApplication app(argc, argv);
-    const auto status = parsePowerStatus(QStringLiteral("AC is:            connected\nBattery SoC:      67%\nBattery charging"));
+    const auto status =
+        parsePowerStatus(QStringLiteral("AC is:            connected\nBattery SoC:      67%\nBattery charging"));
     assert(status.has_value());
     assert(status->chargePercent == 67);
     assert(status->acConnected);
