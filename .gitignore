@@ -44,7 +44,6 @@ build/
 Build/
 build-*/
 buildDir/
-meson-build/
 
 # CMake generated files
 CMakeFiles/
@@ -54,6 +53,8 @@ Makefile
 install_manifest.txt
 compile_commands.json
 !compile_commands.json
+*.qrc.depends
+*_autogen/
 
 # Temporary files
 *.tmp

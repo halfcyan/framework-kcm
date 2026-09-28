@@ -1,0 +1,10 @@
+{
+    "KPlugin": {
+        "Name": "Framework Laptop",
+        "Description": "Configure Framework laptop hardware",
+        "Icon": "battery",
+        "FormFactors": ["desktop", "handset", "tablet", "mediacenter"]
+    },
+    "X-KDE-Keywords": "Framework,battery,charge limit,keyboard backlight,touchscreen,firmware",
+    "X-KDE-System-Settings-Parent-Category": "hardware"
+}

@@ -4,12 +4,13 @@ name: C++ CI
     paths:
       - "src/**"
       - "tests/**"
-      - "meson_options.txt"
+      - "CMakeLists.txt"
+      - "src/CMakeLists.txt"
+      - "tests/CMakeLists.txt"
       - "README.md"
       - ".clang-format"
       - ".clang-tidy"
       - ".github/workflows/cpp.yml"
-      - "meson.build"
   workflow_dispatch:
 
 jobs:
@@ -20,7 +21,7 @@ jobs:
     uses: FyraLabs/actions/.github/workflows/cpp.yml@main
     with:
       container: ghcr.io/terrapkg/builder:f44
-      packages: meson
-      configure-command: meson setup build
-      build-command: meson compile -C build
-      test-command: meson test -C build --print-errorlogs
+      packages: cmake extra-cmake-modules qt6-qtbase-devel qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel
+      configure-command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      build-command: cmake --build build --parallel
+      test-command: ctest --test-dir build --output-on-failure
