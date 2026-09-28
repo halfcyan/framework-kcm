@@ -20,7 +20,7 @@ On Fedora, the development dependencies can be installed with:
 
 ```sh
 sudo dnf install gcc-c++ cmake extra-cmake-modules qt6-qtbase-devel \
-    qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel
+    qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel kf6-ki18n-devel
 ```
 
 ## Compile

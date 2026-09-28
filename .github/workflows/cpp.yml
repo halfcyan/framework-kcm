@@ -21,7 +21,7 @@ jobs:
     uses: FyraLabs/actions/.github/workflows/cpp.yml@main
     with:
       container: ghcr.io/terrapkg/builder:f44
-      packages: cmake extra-cmake-modules qt6-qtbase-devel qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel
+      packages: cmake extra-cmake-modules qt6-qtbase-devel qt6-qtdeclarative-devel kf6-kcmutils-devel kf6-kirigami-devel kf6-ki18n-devel
       configure-command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
       build-command: cmake --build build --parallel
       test-command: ctest --test-dir build --output-on-failure
