@@ -4,6 +4,10 @@ KDE lets you create custom settings panes, called KCMs. I saw a gap where Framew
 
 This project changes that. It's still very work in progress, but it creates a settings pane and calls framework_tool on the backend.
 
+Example screenshot (still early in development):
+
+![framework-kcm-sample.png](resources/framework-kcm-sample.png)
+
 ## Requirements
 
 - Qt 6.5 or newer
