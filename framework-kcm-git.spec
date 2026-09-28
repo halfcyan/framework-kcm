@@ -31,7 +31,7 @@ Framework KCM is a KDE System Settings pane for configuring Framework Laptop
 hardware. It provides battery and hardware controls through framework_tool.
 
 %prep
-%autosetup -n framework-kcm-%{version}
+%autosetup -n framework-kcm-%{autogitversion}
 
 %conf
 %cmake_kf6
