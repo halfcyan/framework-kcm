@@ -35,11 +35,15 @@ KCMUtils.ScrollViewKCM {
         }
     }
 
-    FrameworkBackend { id: backend }
+    FrameworkBackend {
+        id: backend
+    }
 
     ListModel {
         id: schedules
-        ListElement { days: "Mon,Tue,Wed,Thu,Fri"; time: "08:00"; limit: 80 }
+        ListElement {
+            days: "Mon,Tue,Wed,Thu,Fri"; time: "08:00"; limit: 80
+        }
     }
 
     Timer {
@@ -58,6 +62,7 @@ KCMUtils.ScrollViewKCM {
 
     Connections {
         target: kcm
+
         function onScheduleSaved() {
             root.changesSaved = true
             savedTimer.restart()
@@ -203,7 +208,8 @@ KCMUtils.ScrollViewKCM {
 
             Repeater {
                 model: schedules
-                delegate: Controls.Frame {
+                delegate: Controls.Frame
+                {
                     id: scheduleCard
                     required property int index
                     required property string days
@@ -219,7 +225,9 @@ KCMUtils.ScrollViewKCM {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Controls.Label { text: i18n("Schedule %1", index + 1); font.bold: true; Layout.fillWidth: true }
+                            Controls.Label {
+                                text: i18n("Schedule %1", index + 1); font.bold: true; Layout.fillWidth: true
+                            }
                             Controls.Button {
                                 icon.name: "list-remove"
                                 display: Controls.AbstractButton.IconOnly
@@ -232,13 +240,16 @@ KCMUtils.ScrollViewKCM {
                             }
                         }
 
-                        Controls.Label { text: i18n("Days"); font.bold: true }
+                        Controls.Label {
+                            text: i18n("Days"); font.bold: true
+                        }
                         Flow {
                             Layout.fillWidth: true
                             spacing: Kirigami.Units.smallSpacing
                             Repeater {
                                 model: root.dayLabels
-                                delegate: Controls.CheckBox {
+                                delegate: Controls.CheckBox
+                                {
                                     required property int index
                                     text: root.dayLabels[index]
                                     enabled: root.scheduleEnabled
@@ -253,7 +264,9 @@ KCMUtils.ScrollViewKCM {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Controls.Label { text: i18n("Time"); font.bold: true }
+                            Controls.Label {
+                                text: i18n("Time"); font.bold: true
+                            }
                             Controls.TextField {
                                 Layout.fillWidth: true
                                 enabled: root.scheduleEnabled
@@ -264,18 +277,23 @@ KCMUtils.ScrollViewKCM {
                                     root.queueSave()
                                 }
                             }
-                            Controls.Label { text: i18n("Charge limit"); font.bold: true }
+                            Controls.Label {
+                                text: i18n("Charge limit"); font.bold: true
+                            }
                             Controls.Slider {
                                 Layout.preferredWidth: Kirigami.Units.gridUnit * 10
                                 enabled: root.scheduleEnabled
-                                from: 20; to: 100; stepSize: 5
+                                from: 20;
+                                to: 100; stepSize: 5
                                 value: scheduleCard.limit
                                 onMoved: {
                                     schedules.setProperty(scheduleCard.scheduleIndex, "limit", value)
                                     root.queueSave()
                                 }
                             }
-                            Controls.Label { text: i18n("%1%", scheduleCard.limit); Layout.preferredWidth: Kirigami.Units.gridUnit * 3 }
+                            Controls.Label {
+                                text: i18n("%1%", scheduleCard.limit); Layout.preferredWidth: Kirigami.Units.gridUnit * 3
+                            }
                         }
                     }
                 }

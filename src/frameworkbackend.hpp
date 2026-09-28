@@ -60,7 +60,7 @@ Q_SIGNALS:
 
 private:
     void run(const QStringList &arguments, bool refreshAfter = false);
-    static QString findTool() ;
+    static QString findTool();
     void setError(const QString &error);
     void probeCapabilities();
 

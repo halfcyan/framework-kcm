@@ -1,18 +1,16 @@
 #include "frameworkbackend.hpp"
 
-#include <QProcess>
 #include <QDir>
 #include <QFile>
+#include <QProcess>
 #include <QRegularExpression>
-#include <QStandardPaths>
 #include <QSet>
+#include <QStandardPaths>
 
 #include <algorithm>
 
-std::optional<PowerStatus> parsePowerStatus(const QString &output)
-{
-    const auto charge = QRegularExpression(QStringLiteral("(?:Battery SoC|Charge level):\\s*(\\d+)%"))
-                            .match(output);
+std::optional<PowerStatus> parsePowerStatus(const QString &output) {
+    const auto charge = QRegularExpression(QStringLiteral("(?:Battery SoC|Charge level):\\s*(\\d+)%")).match(output);
     if (!charge.hasMatch()) {
         return std::nullopt;
     }
@@ -20,14 +18,12 @@ std::optional<PowerStatus> parsePowerStatus(const QString &output)
     PowerStatus status;
     status.chargePercent = charge.captured(1).toInt();
     status.acConnected = output.contains(QStringLiteral("AC is:            connected"));
-    const auto state = QRegularExpression(QStringLiteral("Battery (charging|discharging|not charging)"))
-                           .match(output);
+    const auto state = QRegularExpression(QStringLiteral("Battery (charging|discharging|not charging)")).match(output);
     status.state = state.hasMatch() ? state.captured(1) : QStringLiteral("unknown");
     return status;
 }
 
-std::optional<int> parseChargeLimit(const QString &output)
-{
+std::optional<int> parseChargeLimit(const QString &output) {
     const auto match = QRegularExpression(QStringLiteral("Maximum\\s+(\\d+)%")).match(output);
     if (!match.hasMatch()) {
         return std::nullopt;
@@ -35,17 +31,14 @@ std::optional<int> parseChargeLimit(const QString &output)
     return match.captured(1).toInt();
 }
 
-FrameworkBackend::FrameworkBackend(QObject *parent)
-    : QObject(parent)
-{
+FrameworkBackend::FrameworkBackend(QObject *parent) : QObject(parent) {
     m_fixtureMode = qEnvironmentVariableIntValue("FRAMEWORK_KCM_FIXTURE") != 0;
     m_fixtureModel = qEnvironmentVariable("FRAMEWORK_KCM_FIXTURE_MODEL").toLower();
     probeCapabilities();
     refresh();
 }
 
-void FrameworkBackend::probeCapabilities()
-{
+void FrameworkBackend::probeCapabilities() {
     if (m_fixtureMode) {
         // Profiles model the hardware differences relevant to this KCM.
         if (m_fixtureModel == QStringLiteral("framework-12") || m_fixtureModel == QStringLiteral("12")) {
@@ -54,7 +47,8 @@ void FrameworkBackend::probeCapabilities()
             m_supportsInputDeck = true;
             m_supportsTabletMode = true;
             m_supportsTouchscreen = true;
-        } else if (m_fixtureModel == QStringLiteral("framework-12-gen2") || m_fixtureModel == QStringLiteral("framework-12-2nd-gen") ||
+        } else if (m_fixtureModel == QStringLiteral("framework-12-gen2") ||
+                   m_fixtureModel == QStringLiteral("framework-12-2nd-gen") ||
                    m_fixtureModel == QStringLiteral("12-gen2")) {
             m_supportsKeyboardBacklight = true;
             m_supportsFingerprintBrightness = false;
@@ -96,7 +90,7 @@ void FrameworkBackend::probeCapabilities()
 
     const auto output = QString::fromLocal8Bit(features.readAllStandardOutput()).toLower();
     const auto supported = [&output](const QStringList &names) {
-        for (const auto &name : names) {
+        for (const auto &name: names) {
             if (const qsizetype index = output.indexOf(name); index >= 0) {
                 const auto lineStart = output.lastIndexOf(QLatin1Char('\n'), index) + 1;
                 const auto lineEnd = output.indexOf(QLatin1Char('\n'), index);
@@ -117,9 +111,9 @@ void FrameworkBackend::probeCapabilities()
     m_supportsTouchscreen = supported({QStringLiteral("touchscreen")});
 }
 
-QString FrameworkBackend::findTool()
-{
-    for (const auto &name : {QStringLiteral("framework_tool"), QStringLiteral("framework-tool"), QStringLiteral("framework-system")}) {
+QString FrameworkBackend::findTool() {
+    for (const auto &name:
+         {QStringLiteral("framework_tool"), QStringLiteral("framework-tool"), QStringLiteral("framework-system")}) {
         if (const auto path = QStandardPaths::findExecutable(name); !path.isEmpty()) {
             return path;
         }
@@ -127,8 +121,7 @@ QString FrameworkBackend::findTool()
     return {};
 }
 
-void FrameworkBackend::setError(const QString &error)
-{
+void FrameworkBackend::setError(const QString &error) {
     if (m_lastError == error) {
         return;
     }
@@ -136,8 +129,7 @@ void FrameworkBackend::setError(const QString &error)
     Q_EMIT errorChanged();
 }
 
-void FrameworkBackend::run(const QStringList &arguments, const bool refreshAfter)
-{
+void FrameworkBackend::run(const QStringList &arguments, const bool refreshAfter) {
     if (m_fixtureMode) {
         if (arguments.value(0) == QStringLiteral("--charge-limit")) {
             m_chargeLimit = arguments.value(1).toInt();
@@ -165,7 +157,10 @@ void FrameworkBackend::run(const QStringList &arguments, const bool refreshAfter
     }
     if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
         const auto message = QString::fromLocal8Bit(process.readAllStandardError()).trimmed();
-        setError(message.isEmpty() ? tr("The Framework tool could not change this setting. Administrative privileges may be required.") : message);
+        setError(
+            message.isEmpty()
+                ? tr("The Framework tool could not change this setting. Administrative privileges may be required.")
+                : message);
         return;
     }
     setError({});
@@ -174,8 +169,7 @@ void FrameworkBackend::run(const QStringList &arguments, const bool refreshAfter
     }
 }
 
-void FrameworkBackend::refresh()
-{
+void FrameworkBackend::refresh() {
     if (m_fixtureMode) {
         m_status = {.chargePercent = 67, .acConnected = true, .state = QStringLiteral("charging")};
         if (m_chargeLimit < 0) {
@@ -208,20 +202,24 @@ void FrameworkBackend::refresh()
     Q_EMIT statusChanged();
 }
 
-void FrameworkBackend::setChargeLimit(const int limit)
-{
+void FrameworkBackend::setChargeLimit(const int limit) {
     run({QStringLiteral("--charge-limit"), QString::number(std::clamp(limit, 20, 100))}, true);
 }
 
 void FrameworkBackend::setFullCharge() { run({QStringLiteral("--charge-limit"), QStringLiteral("100")}, true); }
-void FrameworkBackend::setKeyboardBacklight(const int percent) { run({QStringLiteral("--kblight"), QString::number(std::clamp(percent, 0, 100))}); }
-void FrameworkBackend::setFingerprintBrightness(const int percent) { run({QStringLiteral("--fp-brightness"), QString::number(std::clamp(percent, 0, 100))}); }
+void FrameworkBackend::setKeyboardBacklight(const int percent) {
+    run({QStringLiteral("--kblight"), QString::number(std::clamp(percent, 0, 100))});
+}
+void FrameworkBackend::setFingerprintBrightness(const int percent) {
+    run({QStringLiteral("--fp-brightness"), QString::number(std::clamp(percent, 0, 100))});
+}
 void FrameworkBackend::setInputDeckMode(const QString &mode) { run({QStringLiteral("--inputdeck-mode"), mode}); }
 void FrameworkBackend::setTabletMode(const QString &mode) { run({QStringLiteral("--tablet-mode"), mode}); }
-void FrameworkBackend::setTouchscreenEnabled(const bool enabled) { run({QStringLiteral("--touchscreen-enable"), enabled ? QStringLiteral("true") : QStringLiteral("false")}); }
+void FrameworkBackend::setTouchscreenEnabled(const bool enabled) {
+    run({QStringLiteral("--touchscreen-enable"), enabled ? QStringLiteral("true") : QStringLiteral("false")});
+}
 
-void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList &schedules)
-{
+void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList &schedules) {
     if (m_fixtureMode) {
         Q_UNUSED(enabled)
         Q_UNUSED(schedules)
@@ -229,7 +227,8 @@ void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList 
         return;
     }
 
-    const auto configDir = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QStringLiteral("/systemd/user");
+    const auto configDir =
+        QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QStringLiteral("/systemd/user");
     if (!QDir().mkpath(configDir)) {
         setError(tr("Could not create the user systemd configuration directory."));
         return;
@@ -241,8 +240,11 @@ void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList 
             QFile::remove(configDir + QStringLiteral("/framework-charge-limit-%1.service").arg(index));
             QFile::remove(configDir + QStringLiteral("/framework-charge-limit-%1.timer").arg(index));
         }
-        QProcess::startDetached(QStringLiteral("systemctl"), {QStringLiteral("--user"), QStringLiteral("daemon-reload")});
-        QProcess::startDetached(QStringLiteral("systemctl"), {QStringLiteral("--user"), QStringLiteral("disable"), QStringLiteral("--now"), QStringLiteral("framework-charge-limit-*.timer")});
+        QProcess::startDetached(QStringLiteral("systemctl"),
+                                {QStringLiteral("--user"), QStringLiteral("daemon-reload")});
+        QProcess::startDetached(QStringLiteral("systemctl"),
+                                {QStringLiteral("--user"), QStringLiteral("disable"), QStringLiteral("--now"),
+                                 QStringLiteral("framework-charge-limit-*.timer")});
         return;
     }
 
@@ -262,7 +264,9 @@ void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList 
         QFile::remove(configDir + QStringLiteral("/framework-charge-limit-%1.service").arg(index));
         QFile::remove(configDir + QStringLiteral("/framework-charge-limit-%1.timer").arg(index));
     }
-    QProcess::startDetached(QStringLiteral("systemctl"), {QStringLiteral("--user"), QStringLiteral("disable"), QStringLiteral("--now"), QStringLiteral("framework-charge-limit-*.timer")});
+    QProcess::startDetached(QStringLiteral("systemctl"),
+                            {QStringLiteral("--user"), QStringLiteral("disable"), QStringLiteral("--now"),
+                             QStringLiteral("framework-charge-limit-*.timer")});
 
     for (qsizetype index = 0; index < schedules.size(); ++index) {
         const auto schedule = schedules.at(index).toMap();
@@ -273,7 +277,7 @@ void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList 
             setError(tr("Each schedule needs at least one day and a valid time in HH:MM format."));
             return;
         }
-        for (const auto &day : days) {
+        for (const auto &day: days) {
             const auto key = day + QLatin1Char('|') + time;
             if (scheduleKeys.contains(key)) {
                 setError(tr("The same weekday and time cannot be scheduled more than once."));
@@ -286,13 +290,17 @@ void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList 
         const auto timerPath = configDir + QStringLiteral("/framework-charge-limit-%1.timer").arg(index);
         QFile serviceFile(servicePath);
         QFile timerFile(timerPath);
-        if (!serviceFile.open(QIODevice::WriteOnly | QIODevice::Truncate) || !timerFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (!serviceFile.open(QIODevice::WriteOnly | QIODevice::Truncate) ||
+            !timerFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             setError(tr("Could not write the user systemd schedule."));
             return;
         }
-        serviceFile.write(QStringLiteral("[Unit]\nDescription=Apply Framework battery charge limit\n\n[Service]\nType=oneshot\nExecStart=%1 --charge-limit %2\n").arg(tool, QString::number(limit)).toUtf8());
+        serviceFile.write(QStringLiteral("[Unit]\nDescription=Apply Framework battery charge "
+                                         "limit\n\n[Service]\nType=oneshot\nExecStart=%1 --charge-limit %2\n")
+                              .arg(tool, QString::number(limit))
+                              .toUtf8());
         auto timerContents = QStringLiteral("[Unit]\nDescription=Framework battery charge limit schedule\n\n[Timer]\n");
-        for (const auto &day : days) {
+        for (const auto &day: days) {
             timerContents += QStringLiteral("OnCalendar=%1 *-*-* %2:00\n").arg(day, time);
         }
         timerContents += QStringLiteral("Persistent=true\n\n[Install]\nWantedBy=timers.target\n");
@@ -300,7 +308,9 @@ void FrameworkBackend::configureSchedule(const bool enabled, const QVariantList 
     }
     QProcess::startDetached(QStringLiteral("systemctl"), {QStringLiteral("--user"), QStringLiteral("daemon-reload")});
     for (qsizetype index = 0; index < schedules.size(); ++index) {
-        QProcess::startDetached(QStringLiteral("systemctl"), {QStringLiteral("--user"), QStringLiteral("enable"), QStringLiteral("--now"), QStringLiteral("framework-charge-limit-%1.timer").arg(index)});
+        QProcess::startDetached(QStringLiteral("systemctl"),
+                                {QStringLiteral("--user"), QStringLiteral("enable"), QStringLiteral("--now"),
+                                 QStringLiteral("framework-charge-limit-%1.timer").arg(index)});
     }
     setError({});
 }
