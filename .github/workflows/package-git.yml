@@ -1,0 +1,36 @@
+name: Package Git build
+permissions:
+  contents: read
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "packaging/anda-git.spec"
+      - "packaging/anda.hcl"
+      - "src/**"
+  workflow_dispatch:
+jobs:
+  anda:
+    strategy:
+      matrix:
+        version: ["f44"]
+        arch: ["x86_64", "aarch64"]
+      fail-fast: false
+    runs-on: ${{ matrix.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    container:
+      image: ghcr.io/terrapkg/builder:${{ matrix.version }}
+      options: --cap-add=SYS_ADMIN --privileged
+    defaults:
+      run:
+        working-directory: ./packaging
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build Anda
+        uses: FyraLabs/anda-build@main
+        with:
+          name: "kcm-git"
+          mockConfig: terra-44-${{ matrix.arch }}

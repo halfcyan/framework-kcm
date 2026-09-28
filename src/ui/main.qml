@@ -168,6 +168,9 @@ KCMUtils.ScrollViewKCM {
 
                     ColumnLayout {
                         Layout.fillWidth: true
+                        Item {
+                            Layout.preferredHeight: Kirigami.Units.largeSpacing / 4
+                        }
                         Controls.Label {
                             text: i18n("Maximum charge")
                             font.bold: true
@@ -202,6 +205,9 @@ KCMUtils.ScrollViewKCM {
 
                     ColumnLayout {
                         Layout.fillWidth: true
+                        Item {
+                            Layout.preferredHeight: Kirigami.Units.largeSpacing / 4
+                        }
                         Controls.Label {
                             text: i18n("One-time override")
                             font.bold: true
@@ -226,6 +232,10 @@ KCMUtils.ScrollViewKCM {
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: Kirigami.Units.smallSpacing
+
+                    Item {
+                        Layout.preferredHeight: Kirigami.Units.largeSpacing / 4
+                    }
 
                     Kirigami.Heading {
                         text: i18n("Charge schedule")
@@ -324,6 +334,7 @@ KCMUtils.ScrollViewKCM {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignTop
                         visible: backend.supportsInputDeck || backend.supportsTabletMode
+                        Item { Layout.fillHeight: true }
                         Controls.Label { visible: backend.supportsInputDeck; text: i18n("Input deck"); font.bold: true }
                         Controls.Label {
                             visible: backend.supportsInputDeck
@@ -363,6 +374,7 @@ KCMUtils.ScrollViewKCM {
                             model: [i18n("Follow sensors"), i18n("Tablet"), i18n("Laptop")]
                             onActivated: backend.setTabletMode(["auto", "tablet", "laptop"][currentIndex])
                         }
+                        Item { Layout.fillHeight: true }
                     }
                 }
                 RowLayout {
