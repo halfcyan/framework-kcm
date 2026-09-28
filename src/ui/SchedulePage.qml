@@ -84,22 +84,22 @@ KCMUtils.ScrollViewKCM {
     }
 
     function collectSchedules() {
-        var result = []
-        var seen = {}
-        var errors = []
-        for (var i = 0; i < schedules.count; ++i) {
-            var entry = schedules.get(i)
-            var days = daysForSchedule(entry.days)
+        const result = [];
+        const seen = {};
+        const errors = [];
+        for (let i = 0; i < schedules.count; ++i) {
+            const entry = schedules.get(i);
+            const days = daysForSchedule(entry.days);
             if (days.length === 0 || (days.length === 1 && days[0] === "")) {
                 errors.push(i18n("Schedule %1 must have at least one weekday.", i + 1))
             }
             if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(entry.time)) {
                 errors.push(i18n("Schedule %1 must use a valid time in HH:MM format.", i + 1))
             }
-            for (var j = 0; j < days.length; ++j) {
-                var key = days[j] + "|" + entry.time
+            for (let j = 0; j < days.length; ++j) {
+                const key = days[j] + "|" + entry.time;
                 if (seen[key] === true) {
-                    var error = i18n("%1 at %2 is already used by another schedule.", days[j], entry.time)
+                    const error = i18n("%1 at %2 is already used by another schedule.", days[j], entry.time);
                     if (errors.indexOf(error) < 0) {
                         errors.push(error)
                     }
@@ -117,11 +117,11 @@ KCMUtils.ScrollViewKCM {
             reportedErrors = []
             return true
         }
-        var collected = collectSchedules()
-        var active = collected.errors
-        var retained = []
-        var newlyReported = []
-        for (var i = 0; i < active.length; ++i) {
+        const collected = collectSchedules();
+        const active = collected.errors;
+        const retained = [];
+        const newlyReported = [];
+        for (let i = 0; i < active.length; ++i) {
             if (reportedErrors.indexOf(active[i]) >= 0) {
                 retained.push(active[i])
             } else {
@@ -140,7 +140,7 @@ KCMUtils.ScrollViewKCM {
     }
 
     function saveSchedules() {
-        var collected = collectSchedules()
+        const collected = collectSchedules();
         if (collected.errors.length > 0) {
             return
         }
@@ -153,9 +153,9 @@ KCMUtils.ScrollViewKCM {
     }
 
     function toggleDay(index, day, checked) {
-        var entry = schedules.get(index)
-        var days = daysForSchedule(entry.days)
-        var position = days.indexOf(day)
+        const entry = schedules.get(index);
+        const days = daysForSchedule(entry.days);
+        const position = days.indexOf(day);
         if (checked && position < 0) {
             days.push(day)
         } else if (!checked && position >= 0) {

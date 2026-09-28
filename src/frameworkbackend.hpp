@@ -3,7 +3,6 @@
 #include <QObject>
 
 #include <optional>
-#include <string>
 
 struct PowerStatus {
     int chargePercent = -1;
@@ -32,18 +31,18 @@ class FrameworkBackend : public QObject {
 public:
     explicit FrameworkBackend(QObject *parent = nullptr);
 
-    int chargePercent() const { return m_status.chargePercent; }
-    bool acConnected() const { return m_status.acConnected; }
-    QString batteryState() const { return m_status.state; }
-    int chargeLimit() const { return m_chargeLimit; }
-    QString lastError() const { return m_lastError; }
-    bool fixtureMode() const { return m_fixtureMode; }
-    QString fixtureModel() const { return m_fixtureModel; }
-    bool supportsKeyboardBacklight() const { return m_supportsKeyboardBacklight; }
-    bool supportsFingerprintBrightness() const { return m_supportsFingerprintBrightness; }
-    bool supportsInputDeck() const { return m_supportsInputDeck; }
-    bool supportsTabletMode() const { return m_supportsTabletMode; }
-    bool supportsTouchscreen() const { return m_supportsTouchscreen; }
+    [[nodiscard]] int chargePercent() const { return m_status.chargePercent; }
+    [[nodiscard]] bool acConnected() const { return m_status.acConnected; }
+    [[nodiscard]] QString batteryState() const { return m_status.state; }
+    [[nodiscard]] int chargeLimit() const { return m_chargeLimit; }
+    [[nodiscard]] QString lastError() const { return m_lastError; }
+    [[nodiscard]] bool fixtureMode() const { return m_fixtureMode; }
+    [[nodiscard]] QString fixtureModel() const { return m_fixtureModel; }
+    [[nodiscard]] bool supportsKeyboardBacklight() const { return m_supportsKeyboardBacklight; }
+    [[nodiscard]] bool supportsFingerprintBrightness() const { return m_supportsFingerprintBrightness; }
+    [[nodiscard]] bool supportsInputDeck() const { return m_supportsInputDeck; }
+    [[nodiscard]] bool supportsTabletMode() const { return m_supportsTabletMode; }
+    [[nodiscard]] bool supportsTouchscreen() const { return m_supportsTouchscreen; }
 
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void setChargeLimit(int limit);
@@ -61,7 +60,7 @@ Q_SIGNALS:
 
 private:
     void run(const QStringList &arguments, bool refreshAfter = false);
-    QString findTool() const;
+    static QString findTool() ;
     void setError(const QString &error);
     void probeCapabilities();
 
