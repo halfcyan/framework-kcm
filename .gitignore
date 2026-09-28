@@ -72,4 +72,4 @@ vcpkg_installed/
 Testing/
 .cache/
 
-.idea/*
+.idea/
