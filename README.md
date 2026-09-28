@@ -91,6 +91,8 @@ On a Framework laptop with `framework_tool` installed:
 kcmshell6 kcm_framework
 ```
 
+You can also open System Settings on KDE and it'll show up automatically.
+
 On a desktop without Framework hardware, use fixture mode. It simulates a 67%
 battery, AC power, and an 80% charge limit. Hardware changes are kept in
 memory and no Framework command is executed:
@@ -114,6 +116,8 @@ The profiles model these controls:
 - `framework-13`: fingerprint LED, keyboard backlight, and input deck; no touchscreen or tablet mode
 - `framework-13-pro`: fingerprint LED, keyboard backlight, touchscreen, and input deck; no tablet mode
 
-The schedule editor supports multiple independent entries. Each entry can have
-its own selected weekdays, time, and charge limit. Saving creates one user
-systemd timer and service pair per entry.
+## License
+
+This project is licensed under GPL-3.0-or-later. That means this project will always be open source, and you may never create propriretary forks.
+
+I felt this was necessary because open source should be the default. In an ideal world, permissive licenses wouldn't cause any issues, because all code would be open source. Unfortunately, we don't live in an ideal world, so this is GPL.
