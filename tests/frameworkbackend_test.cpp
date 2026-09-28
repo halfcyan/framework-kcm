@@ -11,7 +11,9 @@ int main(int argc, char **argv) {
     assert(status->chargePercent == 67);
     assert(status->acConnected);
     assert(status->state == QStringLiteral("charging"));
-    assert(parseChargeLimit(QStringLiteral("Minimum 0%, Maximum 80%")).value() == 80);
+    const auto chargeLimit = parseChargeLimit(QStringLiteral("Minimum 0%, Maximum 80%"));
+    assert(chargeLimit.has_value());
+    assert(*chargeLimit == 80);
     assert(!parsePowerStatus(QStringLiteral("not a power response")).has_value());
 
     qputenv("FRAMEWORK_KCM_FIXTURE", "1");

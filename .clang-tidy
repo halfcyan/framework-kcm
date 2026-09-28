@@ -9,8 +9,10 @@ Checks: >-
   readability-redundant-control-flow,
   readability-simplify-boolean-expr,
   -bugprone-easily-swappable-parameters,
+  -bugprone-invalid-enum-default-initialization,
   -bugprone-narrowing-conversions,
   -performance-no-int-to-ptr,
+  -readability-braces-around-statements,
   -readability-identifier-length
 WarningsAsErrors: '*'
 HeaderFilterRegex: '.*'

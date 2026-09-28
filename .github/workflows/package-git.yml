@@ -12,7 +12,7 @@ on:
       - "src/**"
   workflow_dispatch:
 jobs:
-  anda:
+  framework-kcm:
     strategy:
       matrix:
         version: ["f44"]
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Build Anda
+      - name: Build KCM
         uses: FyraLabs/anda-build@main
         with:
           name: "kcm-git"
