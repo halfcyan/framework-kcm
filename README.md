@@ -1,3 +1,7 @@
+# Deprecation
+
+I found out that there's another project doing the same thing as this, but the tooling over there is much better. I'm now a contributor to that project, so I'd suggest using it instead: https://github.com/flamingspaz/framework-kcm
+
 # Framework Laptop KDE Settings Pane
 
 KDE lets you create custom settings panes, called KCMs. I saw a gap where Framework has a well-defined open source firmware tool, and there's no implementation as a KCM. You have to use it through the GUI.
